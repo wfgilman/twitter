@@ -31,7 +31,7 @@ class TweetCell: UITableViewCell {
                 if hours < 24 {
                     createdAtLabel.text = "\(Int(hours))H"
                 } else {
-                    createdAtLabel.text = "\(tweet.timestamp)"
+                    createdAtLabel.text = "\(tweet.timestampDate!)"
                 }
             }
         }

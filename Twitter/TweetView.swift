@@ -25,6 +25,7 @@ class TweetView: UIView {
             UIView.animate(withDuration: 0.15, animations: { () -> Void in
                 self.userImageView.alpha = 1.0
             })
+            createdAtLabel.text = tweet.timestampDateTime!
         }
     }
     
