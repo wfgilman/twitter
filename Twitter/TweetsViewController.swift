@@ -17,10 +17,16 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Configure refresh control.
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
+        
+        // Configure table view.
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 75.0
+        tableView.estimatedRowHeight = 80.0
+        tableView.insertSubview(refreshControl, at: 0)
         
         // Configure navigation bar.
         if let navigationBar = navigationController?.navigationBar {
@@ -32,12 +38,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
             ]
         }
 
-        TwitterClient.sharedInstance?.homeTimeline(sucess: { (tweets: [Tweet]) in
-            self.tweets = tweets
-            self.tableView.reloadData()
-        }, failure: { (error: Error) in
-            print("Error: \(error.localizedDescription)")
-        })
+        makeTwitterRequest()
     }
 
     @IBAction func logoutButtonTapped(_ sender: Any) {
@@ -67,6 +68,21 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
             let tweetViewController = segue.destination as! TweetViewController
             tweetViewController.tweet = tweet
         }
+    }
+    
+    func makeTwitterRequest() {
+        TwitterClient.sharedInstance?.homeTimeline(sucess: { (tweets: [Tweet]) in
+            self.tweets = tweets
+            self.tableView.reloadData()
+        }, failure: { (error: Error) in
+            print("Error: \(error.localizedDescription)")
+        })
+    }
+    
+    func refreshControlAction(_ refreshControl: UIRefreshControl) {
+        
+        makeTwitterRequest()
+        refreshControl.endRefreshing()
     }
     
 
