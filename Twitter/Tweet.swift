@@ -12,6 +12,7 @@ class Tweet: NSObject {
     
     var text: String?
     var timestamp: Date?
+    var timestampFormatted: String?
     var retweetCount: Int = 0
     var favoritesCount: Int = 0
     var user: User?

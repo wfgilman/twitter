@@ -26,6 +26,14 @@ class TweetCell: UITableViewCell {
             UIView.animate(withDuration: 0.15, animations: { () -> Void in
                 self.userImageView.alpha = 1.0
             })
+            if let since = tweet.timestamp?.timeIntervalSinceNow {
+                let hours = round(since / 3600.0) * -1.0
+                if hours < 24 {
+                    createdAtLabel.text = "\(Int(hours))H"
+                } else {
+                    createdAtLabel.text = "\(tweet.timestamp)"
+                }
+            }
         }
     }
     
