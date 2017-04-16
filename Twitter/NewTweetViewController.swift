@@ -56,6 +56,12 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
                 NSForegroundColorAttributeName : UIColor.white
             ]
         }
+        
+        tweetTextView.becomeFirstResponder()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        tweetTextView.resignFirstResponder()
     }
 
     override func didReceiveMemoryWarning() {
@@ -94,6 +100,7 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
             } else {
                 TwitterClient.sharedInstance?.tweet(status: tweetText, success: { (tweet: Tweet) in
                     print("Tweeted: \(tweet.text!)")
+                    self.delegate?.didTweet?(newTweetViewController: self, tweet: tweet)
                 }, failure: { (error: Error) in
                     print("Error: \(error.localizedDescription)")
                 })
@@ -101,8 +108,6 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
         }
         dismiss(animated: true, completion: nil)
     }
-    
-    
 
     /*
     // MARK: - Navigation

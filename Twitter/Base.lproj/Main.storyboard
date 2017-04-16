@@ -37,11 +37,20 @@
                                     <action selector="onLoginButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="eEV-FP-1GK"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitter" translatesAutoresizingMaskIntoConstraints="NO" id="aUN-RN-HFU">
+                                <rect key="frame" x="112" y="162" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="rqh-b0-axV"/>
+                                    <constraint firstAttribute="width" constant="150" id="wB2-nJ-3oZ"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="BnY-9b-d79" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="9TK-Je-2N1"/>
+                            <constraint firstItem="BnY-9b-d79" firstAttribute="top" secondItem="aUN-RN-HFU" secondAttribute="bottom" constant="125" id="LZC-Qd-xQ6"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="BnY-9b-d79" secondAttribute="bottom" constant="160" id="Qa0-g3-Y4g"/>
+                            <constraint firstItem="aUN-RN-HFU" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="eOq-YY-iZG"/>
                         </constraints>
                     </view>
                     <connections>
@@ -393,7 +402,7 @@
                                     <constraint firstAttribute="height" constant="150" id="ReH-rT-iw3"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardType="twitter"/>
                             </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -472,8 +481,9 @@
         <image name="favorite" width="512" height="512"/>
         <image name="reply" width="200" height="200"/>
         <image name="retweet" width="511" height="290"/>
+        <image name="twitter" width="512" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="tAI-6W-1vH"/>
+        <segue reference="Mw5-gI-slD"/>
     </inferredMetricsTieBreakers>
 </document>

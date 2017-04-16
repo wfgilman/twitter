@@ -29,10 +29,10 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.insertSubview(refreshControl, at: 0)
         
         // Set delegate for new tweet view.
-        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        let nc = storyboard.instantiateViewController(withIdentifier: "NewTweetNavigationController") as! UINavigationController
-        let vc = nc.topViewController as! NewTweetViewController
-        vc.delegate = self
+//        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+//        let nc = storyboard.instantiateViewController(withIdentifier: "NewTweetNavigationController") as! UINavigationController
+//        let vc = nc.topViewController as! NewTweetViewController
+//        vc.delegate = self
         
         // Configure navigation bar.
         if let navigationBar = navigationController?.navigationBar {
@@ -67,11 +67,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func didTweet(newTweetViewController: NewTweetViewController, tweet: Tweet) {
-        print("I was called")
         tweets.insert(tweet, at: 0)
-        for tweet in tweets {
-            print("\(tweet.text)")
-        }
         tableView.reloadData()
     }
     
@@ -92,6 +88,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
             let newTweetViewController = navigationController.topViewController as! NewTweetViewController
             newTweetViewController.replyToUserScreenName = nil
             newTweetViewController.reply_id = nil
+            newTweetViewController.delegate = self
         }
     }
     
