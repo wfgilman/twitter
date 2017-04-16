@@ -15,6 +15,8 @@ class TweetView: UIView {
     @IBOutlet weak var screennameLabel: UILabel!
     @IBOutlet weak var tweetTextLabel: UILabel!
     @IBOutlet weak var createdAtLabel: UILabel!
+    @IBOutlet weak var retweetsLabel: UILabel!
+    @IBOutlet weak var favoritesLabel: UILabel!
     
     var tweet: Tweet! {
         didSet {
@@ -26,10 +28,11 @@ class TweetView: UIView {
                 self.userImageView.alpha = 1.0
             })
             createdAtLabel.text = tweet.timestampDateTime!
+            retweetsLabel.text = "\(tweet.retweetCount)"
+            favoritesLabel.text = "\(tweet.favoritesCount)"
         }
     }
     
-
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.

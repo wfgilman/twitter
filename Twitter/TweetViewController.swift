@@ -13,6 +13,10 @@ class TweetViewController: UIViewController {
     @IBOutlet var tweetDetailView: TweetView!
     
     var tweet: Tweet?
+    var retweeted: Bool! = false
+    var retweetCount: Int! = 0
+    var favorited: Bool! = false
+    var favoriteCount: Int! = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +39,42 @@ class TweetViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func retweetButtonTapped(_ sender: UIButton) {
+        if !retweeted && tweet?.retweetCount != nil {
+            TwitterClient.sharedInstance?.retweet(id: (tweet?.id)!, success: { (tweet: Tweet) in
+                print("Retweeted: \(tweet.text)")
+            }, failure: { (error: Error) in
+                print("Error: \(error.localizedDescription)")
+            })
+            retweetCount = tweet?.retweetCount
+            retweetCount = retweetCount! + 1
+            tweet?.retweetCount = retweetCount!
+            tweetDetailView.tweet = tweet
+            retweeted = true
+        } else if retweeted && retweetCount != 0 {
+            retweetCount = tweet?.retweetCount
+            retweetCount = retweetCount! - 1
+            tweet?.retweetCount = retweetCount!
+            tweetDetailView.tweet = tweet
+            retweeted = false
+        }
+    }
+    
+    @IBAction func favoriteButtonTapped(_ sender: UIButton) {
+        if !favorited && tweet?.favoritesCount != nil {
+            favoriteCount = tweet?.favoritesCount
+            favoriteCount = favoriteCount! + 1
+            tweet?.favoritesCount = favoriteCount!
+            tweetDetailView.tweet = tweet
+            favorited = true
+        } else if favorited && favoriteCount != 0 {
+            favoriteCount = tweet?.favoritesCount
+            favoriteCount = favoriteCount! - 1
+            tweet?.favoritesCount = favoriteCount!
+            tweetDetailView.tweet = tweet
+            favorited = false
+        }
+    }
 
     /*
     // MARK: - Navigation
