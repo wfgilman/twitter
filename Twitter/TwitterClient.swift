@@ -96,8 +96,19 @@ class TwitterClient: BDBOAuth1SessionManager {
         )
     }
     
-    func retweet(id: String, success: @escaping (Tweet) -> (), failure: @escaping (Error) -> ()) {
-        post("1.1/statuses/retweet/\(id).json", parameters: nil, progress: nil,
+    func tweet(status: String, success: @escaping (Tweet) -> (), failure: @escaping (Error) -> ()) {
+        reply(status: status, reply_id: nil, success: success, failure: failure)
+    }
+    
+    func reply(status: String, reply_id: String?, success: @escaping (Tweet) -> (), failure: @escaping (Error) -> ()) {
+        
+        var parameters: [String : String] = ["status" : status]
+        
+        if reply_id != nil {
+            parameters["in_reply_to_status_id"] = reply_id
+        }
+        
+        post("1.1/statuses/update.json", parameters: parameters, progress: nil,
             success: { (task: URLSessionDataTask?, response: Any?) in
                 
                 let dictionary = response as! NSDictionary
@@ -107,6 +118,35 @@ class TwitterClient: BDBOAuth1SessionManager {
             failure: { (task: URLSessionDataTask?, error: Error?) in
                 
                 failure((error)!)
+            }
+        )
+    }
+    
+    func retweet(id: String, success: @escaping (Tweet) -> (), failure: @escaping (Error) -> ()) {
+        post("1.1/statuses/retweet/\(id).json", parameters: ["id" : id], progress: nil,
+            success: { (task: URLSessionDataTask?, response: Any?) in
+                
+                let dictionary = response as! NSDictionary
+                let tweet = Tweet(dictionary: dictionary)
+                success(tweet)
+            },
+            failure: { (task: URLSessionDataTask?, error: Error?) in
+                
+                failure((error)!)
+            }
+        )
+    }
+    
+    func favorite(id: String, success: @escaping (NSDictionary) -> (), failure: @escaping (Error) -> ()) {
+        post("1.1/favorites/create.json?id=\(id)", parameters: ["id" : id], progress: nil,
+             success: { (task: URLSessionDataTask?, response: Any?) in
+    
+                let resp = response as! NSDictionary
+                success(resp)
+            },
+            failure: { (task: URLSessionDataTask?, error: Error?) in
+    
+            failure((error)!)
             }
         )
     }

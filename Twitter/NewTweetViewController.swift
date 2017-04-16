@@ -8,16 +8,24 @@
 
 import UIKit
 
+@objc protocol NewTweetViewControllerDelegate {
+    
+    @objc optional func didTweet(newTweetViewController: NewTweetViewController, tweet: Tweet)
+}
+
 class NewTweetViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet var newTweetView: NewTweetView!
     @IBOutlet weak var tweetTextView: UITextView!
     
     var user: User!
-    var remainingCharCount: Int!
+    var replyToUserScreenName: String?
+    var reply_id: String?
+    
+    weak var delegate: NewTweetViewControllerDelegate?
     
     let remainingCharacters = UILabel(frame: CGRect(x: 0, y: 0, width: 50, height: 30))
-    let tweetButton = UIBarButtonItem(title: "Tweet", style: .plain, target: self, action: nil)
+    let tweetButton = UIBarButtonItem(title: "Tweet", style: .plain, target: self, action: #selector(tweetButtonTapped(_:)))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,8 +35,14 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
         
         tweetTextView.delegate = self
         
+        // Recieve reply and put screenname into UITextView.
+        if replyToUserScreenName != nil {
+            tweetTextView.text = "@\(replyToUserScreenName!) "
+        }
+        
         // Configure navigation bar.
-        remainingCharacters.text = "140"
+        let chars = getRemainingCharacters(textView: tweetTextView)
+        remainingCharacters.text = "\(chars)"
         remainingCharacters.textAlignment = NSTextAlignment.left
         remainingCharacters.textColor = UIColor.white
         let remainingCharsButton = UIBarButtonItem(customView: remainingCharacters)
@@ -54,15 +68,40 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        if textView.text != nil {
-            remainingCharCount = 140 - textView.text!.characters.count
-        } else {
-            remainingCharCount = 140
-        }
-        remainingCharacters.text = "\(remainingCharCount!)"
+        let chars = getRemainingCharacters(textView: textView)
+        remainingCharacters.text = "\(chars)"
         let remainingCharsButton = UIBarButtonItem(customView: remainingCharacters)
         navigationItem.setRightBarButtonItems([tweetButton, remainingCharsButton], animated: false)
     }
+    
+    func getRemainingCharacters(textView: UITextView) -> Int {
+        if textView.text != nil {
+            return 140 - textView.text!.characters.count
+        } else {
+            return 140
+        }
+    }
+    
+    func tweetButtonTapped(_ sender: UIBarButtonItem) {
+        if let tweetText = tweetTextView.text {
+            if reply_id != nil {
+                TwitterClient.sharedInstance?.reply(status: tweetText, reply_id: reply_id, success: { (tweet: Tweet) in
+                    print("Replied: \(tweet.text!)")
+                    self.delegate?.didTweet?(newTweetViewController: self, tweet: tweet)
+                }, failure: { (error: Error) in
+                    print("Error: \(error.localizedDescription)")
+                })
+            } else {
+                TwitterClient.sharedInstance?.tweet(status: tweetText, success: { (tweet: Tweet) in
+                    print("Tweeted: \(tweet.text!)")
+                }, failure: { (error: Error) in
+                    print("Error: \(error.localizedDescription)")
+                })
+            }
+        }
+        dismiss(animated: true, completion: nil)
+    }
+    
     
 
     /*

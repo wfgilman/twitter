@@ -109,6 +109,7 @@
                                                 <constraint firstItem="BdH-rf-73X" firstAttribute="top" secondItem="R1r-zT-hbq" secondAttribute="top" constant="8" id="d40-Hr-F5H"/>
                                                 <constraint firstItem="Oho-fJ-GmL" firstAttribute="centerY" secondItem="TPZ-2E-izA" secondAttribute="centerY" id="ekK-v9-nSX"/>
                                                 <constraint firstItem="zUh-w7-WHh" firstAttribute="top" secondItem="oqF-vs-NZg" secondAttribute="bottom" constant="5" id="fhs-be-8Ck"/>
+                                                <constraint firstItem="Oho-fJ-GmL" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="TPZ-2E-izA" secondAttribute="trailing" constant="3" id="lLF-NS-wle"/>
                                                 <constraint firstItem="TPZ-2E-izA" firstAttribute="centerY" secondItem="oqF-vs-NZg" secondAttribute="centerY" id="laQ-oV-pky"/>
                                                 <constraint firstItem="TPZ-2E-izA" firstAttribute="leading" secondItem="oqF-vs-NZg" secondAttribute="trailing" constant="3" id="ujU-wl-E7R"/>
                                                 <constraint firstAttribute="trailing" secondItem="Oho-fJ-GmL" secondAttribute="trailing" constant="8" id="zhu-ca-g0f"/>
@@ -143,7 +144,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="New" id="duc-QI-lnJ">
                             <connections>
-                                <segue destination="WMT-5z-7Xl" kind="presentation" id="Mw5-gI-slD"/>
+                                <segue destination="WMT-5z-7Xl" kind="presentation" identifier="newTweetSegue" id="Mw5-gI-slD"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -251,7 +252,7 @@
                                 </constraints>
                                 <state key="normal" title="Reply" image="reply"/>
                                 <connections>
-                                    <segue destination="WMT-5z-7Xl" kind="presentation" id="tAI-6W-1vH"/>
+                                    <segue destination="WMT-5z-7Xl" kind="presentation" identifier="replyFromViewSegue" id="tAI-6W-1vH"/>
                                 </connections>
                             </button>
                             <button opaque="NO" alpha="0.40000000000000002" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DZg-1e-Wx0">
@@ -330,7 +331,7 @@
                     <navigationItem key="navigationItem" title="Tweet" id="gvr-mv-aU0">
                         <barButtonItem key="rightBarButtonItem" title="Reply" id="spq-Sd-as2">
                             <connections>
-                                <segue destination="WMT-5z-7Xl" kind="presentation" id="Fhq-EL-Nc8"/>
+                                <segue destination="WMT-5z-7Xl" kind="presentation" identifier="replyFromNavItemSegue" id="Fhq-EL-Nc8"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -462,6 +463,6 @@
         <image name="retweet" width="511" height="290"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="tAI-6W-1vH"/>
+        <segue reference="Mw5-gI-slD"/>
     </inferredMetricsTieBreakers>
 </document>

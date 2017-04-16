@@ -42,7 +42,7 @@ class TweetViewController: UIViewController {
     @IBAction func retweetButtonTapped(_ sender: UIButton) {
         if !retweeted && tweet?.retweetCount != nil {
             TwitterClient.sharedInstance?.retweet(id: (tweet?.id)!, success: { (tweet: Tweet) in
-                print("Retweeted: \(tweet.text)")
+                print("Retweeted: \(tweet.text!)")
             }, failure: { (error: Error) in
                 print("Error: \(error.localizedDescription)")
             })
@@ -62,6 +62,11 @@ class TweetViewController: UIViewController {
     
     @IBAction func favoriteButtonTapped(_ sender: UIButton) {
         if !favorited && tweet?.favoritesCount != nil {
+            TwitterClient.sharedInstance?.favorite(id: (tweet?.id)!, success: { (resp: NSDictionary) in
+                print("Favorited: \(resp["text"]!)")
+            }, failure: { (error: Error) in
+                print("Error: \(error.localizedDescription)")
+            })
             favoriteCount = tweet?.favoritesCount
             favoriteCount = favoriteCount! + 1
             tweet?.favoritesCount = favoriteCount!
@@ -76,14 +81,14 @@ class TweetViewController: UIViewController {
         }
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "replyFromViewSegue" || segue.identifier == "replyFromNavItemSegue" {
+            let navigationController = segue.destination as! UINavigationController
+            let newTweetViewController = navigationController.topViewController as! NewTweetViewController
+            newTweetViewController.replyToUserScreenName = tweet?.user?.screenname
+            newTweetViewController.reply_id = tweet?.id
+        }
     }
-    */
+    
 
 }

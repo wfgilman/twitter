@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NewTweetViewControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
 
@@ -28,6 +28,11 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.estimatedRowHeight = 80.0
         tableView.insertSubview(refreshControl, at: 0)
         
+        // Set delegate for new tweet view.
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        let newTweetVC = storyboard.instantiateViewController(withIdentifier: "NewTweetViewController") as! NewTweetViewController
+        newTweetVC.delegate = self
+        
         // Configure navigation bar.
         if let navigationBar = navigationController?.navigationBar {
             navigationBar.barTintColor = UIColor(red: 62.0 / 255.0, green: 204.0 / 255.0, blue: 1.0, alpha: 1.0)
@@ -45,6 +50,8 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         TwitterClient.sharedInstance?.logout()
     }
     
+    
+    // Delegate methods.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TweetCell", for: indexPath) as! TweetCell
         cell.tweet = tweets[indexPath.row]
@@ -59,17 +66,35 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
+    func didTweet(newTweetViewController: NewTweetViewController, tweet: Tweet) {
+        tweets.insert(tweet, at: 0)
+        for tweet in tweets {
+            print("\(tweet.text)")
+        }
+        tableView.reloadData()
+    }
+    
+    // Segue method.
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showTweetSegue" {
+            
             let cell = sender as! UITableViewCell
             let indexPath = tableView.indexPath(for: cell)
             let tweet = tweets[indexPath!.row]
         
             let tweetViewController = segue.destination as! TweetViewController
             tweetViewController.tweet = tweet
+            
+        } else if segue.identifier == "newTweetSegue" {
+            
+            let navigationController = segue.destination as! UINavigationController
+            let newTweetViewController = navigationController.topViewController as! NewTweetViewController
+            newTweetViewController.replyToUserScreenName = nil
+            newTweetViewController.reply_id = nil
         }
     }
     
+    // Helper functions.
     func makeTwitterRequest() {
         TwitterClient.sharedInstance?.homeTimeline(sucess: { (tweets: [Tweet]) in
             self.tweets = tweets
