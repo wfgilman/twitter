@@ -137,8 +137,13 @@ class TwitterClient: BDBOAuth1SessionManager {
         )
     }
     
-    func favorite(id: String, success: @escaping (NSDictionary) -> (), failure: @escaping (Error) -> ()) {
-        post("1.1/favorites/create.json?id=\(id)", parameters: ["id" : id], progress: nil,
+    func unfavorite(id: String, action: String?, success: @escaping (NSDictionary) -> (), failure: @escaping (Error) -> ()) {
+        favorite(id: id, action: "destroy", success: success, failure: failure)
+    }
+    
+    func favorite(id: String, action: String?, success: @escaping (NSDictionary) -> (), failure: @escaping (Error) -> ()) {
+        let method = action ?? "create"
+        post("1.1/favorites/\(method).json?id=\(id)", parameters: ["id" : id], progress: nil,
              success: { (task: URLSessionDataTask?, response: Any?) in
     
                 let resp = response as! NSDictionary

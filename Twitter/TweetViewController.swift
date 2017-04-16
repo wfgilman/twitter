@@ -43,6 +43,7 @@ class TweetViewController: UIViewController {
         if !retweeted && tweet?.retweetCount != nil {
             TwitterClient.sharedInstance?.retweet(id: (tweet?.id)!, success: { (tweet: Tweet) in
                 print("Retweeted: \(tweet.text!)")
+                self.tweetDetailView.retweetButton.alpha = 1.0
             }, failure: { (error: Error) in
                 print("Error: \(error.localizedDescription)")
             })
@@ -62,8 +63,9 @@ class TweetViewController: UIViewController {
     
     @IBAction func favoriteButtonTapped(_ sender: UIButton) {
         if !favorited && tweet?.favoritesCount != nil {
-            TwitterClient.sharedInstance?.favorite(id: (tweet?.id)!, success: { (resp: NSDictionary) in
+            TwitterClient.sharedInstance?.favorite(id: (tweet?.id)!, action: nil, success: { (resp: NSDictionary) in
                 print("Favorited: \(resp["text"]!)")
+                self.tweetDetailView.favoriteButton.alpha = 1.0
             }, failure: { (error: Error) in
                 print("Error: \(error.localizedDescription)")
             })
@@ -73,6 +75,12 @@ class TweetViewController: UIViewController {
             tweetDetailView.tweet = tweet
             favorited = true
         } else if favorited && favoriteCount != 0 {
+            TwitterClient.sharedInstance?.unfavorite(id: (tweet?.id)!, action: nil, success: { (resp:NSDictionary) in
+                print("Unfavorited: \(resp["text"]!)")
+                self.tweetDetailView.favoriteButton.alpha = 0.4
+            }, failure: { (error: Error) in
+                print("Error: \(error.localizedDescription)")
+            })
             favoriteCount = tweet?.favoritesCount
             favoriteCount = favoriteCount! - 1
             tweet?.favoritesCount = favoriteCount!

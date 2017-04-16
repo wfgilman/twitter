@@ -30,8 +30,9 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         
         // Set delegate for new tweet view.
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        let newTweetVC = storyboard.instantiateViewController(withIdentifier: "NewTweetViewController") as! NewTweetViewController
-        newTweetVC.delegate = self
+        let nc = storyboard.instantiateViewController(withIdentifier: "NewTweetNavigationController") as! UINavigationController
+        let vc = nc.topViewController as! NewTweetViewController
+        vc.delegate = self
         
         // Configure navigation bar.
         if let navigationBar = navigationController?.navigationBar {
@@ -50,7 +51,6 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         TwitterClient.sharedInstance?.logout()
     }
     
-    
     // Delegate methods.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TweetCell", for: indexPath) as! TweetCell
@@ -67,6 +67,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func didTweet(newTweetViewController: NewTweetViewController, tweet: Tweet) {
+        print("I was called")
         tweets.insert(tweet, at: 0)
         for tweet in tweets {
             print("\(tweet.text)")
