@@ -27,9 +27,13 @@ class TweetCell: UITableViewCell {
                 self.userImageView.alpha = 1.0
             })
             if let since = tweet.timestamp?.timeIntervalSinceNow {
-                let hours = round(since / 3600.0) * -1.0
-                if hours < 24 {
-                    createdAtLabel.text = "\(Int(hours))H"
+                let seconds = since * -1.0
+                if seconds < 60 {
+                    createdAtLabel.text = "\(Int(seconds))s"
+                } else if seconds < 3600 {
+                    createdAtLabel.text = "\(Int(seconds / 60.0))m"
+                } else if seconds < 86400 {
+                    createdAtLabel.text = "\(Int(seconds / 3600.0))H"
                 } else {
                     createdAtLabel.text = "\(tweet.timestampDate!)"
                 }
